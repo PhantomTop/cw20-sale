@@ -20,7 +20,7 @@ CONTRACT_VBLCK="juno1k0std830mz8ad34792pm9f5skv0rm2l7jgdqchn7msajatta4zcqq2krdu"
 #not depends
 NODECHAIN=" $NODE --chain-id $CHAIN_ID"
 TXFLAG=" $NODECHAIN --gas-prices 0.03$DENOM --gas auto --gas-adjustment 1.3"
-WALLET="--from Admin"
+WALLET="--from workshop"
 WASMFILE="artifacts/sale.wasm"
 
 FILE_UPLOADHASH="uploadtx.txt"
