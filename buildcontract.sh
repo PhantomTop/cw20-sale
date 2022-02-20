@@ -5,17 +5,17 @@ PARAM=$1
 ####################################    Constants    ##################################################
 
 #depends on mainnet or testnet
-NODE="--node https://rpc.junomint.com:443"
-CHAIN_ID=juno-1
-DENOM="ujuno"
-CONTRACT_VMARBLE="juno1k0std830mz8ad34792pm9f5skv0rm2l7jgdqchn7msajatta4zcqq2krdu"
-CONTRACT_VBLCK="juno1k0std830mz8ad34792pm9f5skv0rm2l7jgdqchn7msajatta4zcqq2krdu"
+# NODE="--node https://rpc.junomint.com:443"
+# CHAIN_ID=juno-1
+# DENOM="ujuno"
+# CONTRACT_VMARBLE="juno1k0std830mz8ad34792pm9f5skv0rm2l7jgdqchn7msajatta4zcqq2krdu"
+# CONTRACT_VBLCK="juno1k0std830mz8ad34792pm9f5skv0rm2l7jgdqchn7msajatta4zcqq2krdu"
 
-# NODE="--node https://rpc.juno.giansalex.dev:443"
-# #NODE="--node https://rpc.uni.junomint.com:443"
-# CHAIN_ID=uni-2
-# DENOM="ujunox"
-# CONTRACT_VMARBLE="juno1j5rl5sy40nmlqyugphgh5hnyrmj2cc5h7swy9x8rm0jkxy566nlqcx0jmv"
+NODE="--node https://rpc.juno.giansalex.dev:443"
+#NODE="--node https://rpc.uni.junomint.com:443"
+CHAIN_ID=uni-2
+DENOM="ujunox"
+CONTRACT_VMARBLE="juno1j5rl5sy40nmlqyugphgh5hnyrmj2cc5h7swy9x8rm0jkxy566nlqcx0jmv"
 
 #not depends
 NODECHAIN=" $NODE --chain-id $CHAIN_ID"
@@ -48,7 +48,8 @@ CreateEnv() {
     export GOPATH=$HOME/go
     export GO111MODULE=on
     export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
-    
+
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     rustup default stable
     rustup target add wasm32-unknown-unknown
 
@@ -58,6 +59,7 @@ CreateEnv() {
     git checkout v2.1.0
     make install
 
+    cd ..
     rm -rf juno
 
     junod keys import workshop workshop.key
@@ -189,9 +191,11 @@ PrintWalletBalance() {
     junod query bank balances $ADDR_ADMIN $NODECHAIN
 }
 
+export PATH="$HOME/ubuntu/go/bin:$PATH"
+export PATH="$HOME/ubuntu/.cargo/bin:$PATH"
 #################################### End of Function ###################################################
 if [[ $PARAM == "" ]]; then
-    #RustBuild
+    RustBuild
     Upload
 sleep 5
     GetCode
