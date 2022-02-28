@@ -58,10 +58,6 @@ CreateEnv() {
     git fetch
     git checkout v2.1.0
     make install
-<<<<<<< HEAD
-=======
-
->>>>>>> a07085bc5a55c80507392c72b97ec0f5c62432e8
     cd ..
     rm -rf juno
 
