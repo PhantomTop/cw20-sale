@@ -72,7 +72,8 @@ CreateSwap() {
 }
 
 QuerySwapAddressList() {
-    junod query wasm list-contract-by-code $SWAP_CODE_ID $NODECHAIN
+    junod query wasm list-contract-by-code $SWAP_CODE_ID $NODECHAIN --help
+
 }
 
 QuerySwapContract() {
@@ -84,6 +85,9 @@ CreateSwap2() {
     echo "================================================="
     echo "Instantiate Pool Contract"
 
+    #Already done scripts(Maybe swap token1 and token2 required.)
+    #junod tx wasm instantiate $SWAP_CODE_ID '{"token1_denom":{"native":"ujuno"}, "token2_denom":{"cw20":"'$TOKEN_MARBLE'"}, "lp_token_code_id": '$LP_TOKEN_CODE_ID'}' --label "MARBLE-JUNO"  $WALLET $TXFLAG -y
+    #junod tx wasm instantiate $SWAP_CODE_ID '{"token1_denom":{"native":"ujuno"}, "token2_denom":{"cw20":"'$TOKEN_BLCK'"}, "lp_token_code_id": '$LP_TOKEN_CODE_ID'}' --label "BLCK-JUNO"  $WALLET $TXFLAG -y
     #Already Created Pools    
     #MARBLE-JUNO: juno1zsws7uhe2cz89qsu70ncuv33aemsc2szmld97mx2yy8gkx7fld6q04kmyd
     #BLCK-JUNO:juno1d6xs8za2z7r8jnjpev9valt6gmj69ggphj9n8930g8rz2mrfde0spnppdj
@@ -105,6 +109,7 @@ CreateSwap2() {
     MARBLE="juno1g2g7ucurum66d42g8k5twk34yegdq8c82858gz0tq2fc75zy7khssgnhjl"
     BLOCK="juno1w5e6gqd9s4z70h6jraulhnuezry0xl78yltp5gtp54h84nlgq30qta23ne"
     NETA="juno168ctmpyppk90d34p3jjy658zf5a5l3w8wk35wht6ccqj4mr0yv8s4j5awr"
+    HLL="juno10dvlms4m555jk67qsrun5a87cn9gje967yl8hn5senjxlycdv37sqqukrn"
 
     # denom: 
     ATOM="ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9"
@@ -112,7 +117,7 @@ CreateSwap2() {
     LUNA="ibc/8F865D9760B482FF6254EDFEC1FF2F1273B9AB6873A7DE484F89639795D73D75"
     SCRT="ibc/B55B08EF3667B0C6F029C2CC9CAA6B00788CF639EBB84B34818C85CBABA33ABD"
     OSMO="ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518"
-
+    
 
     # • MARBLE-BLOCK : juno1ujsvmr9q0uj7rspj6epwtssuftd8zxxelxr3qh6v6ld77esv6jyshdjzau
     # • BLOCK-ATOM : juno1qr69r7g50978yhjpgdgdt2cjnqnp98xk0tte6mds2c4sff2rmtdsv4tyrh
@@ -138,9 +143,22 @@ CreateSwap2() {
     # # • MARBLE-NETA
     #junod tx wasm instantiate $SWAP_CODE_ID '{"token1_denom":{"cw20":"'$MARBLE'"}, "token2_denom":{"cw20":"'$NETA'"}, "lp_token_code_id": '$LP_TOKEN_CODE_ID'}' --label "MARBLE-NETA"  $WALLET $TXFLAG -y
     # # • BLOCK-OSMO
-    junod tx wasm instantiate $SWAP_CODE_ID '{"token1_denom":{"cw20":"'$BLOCK'"}, "token2_denom":{"native":"'$OSMO'"}, "lp_token_code_id": '$LP_TOKEN_CODE_ID'}' --label "BLOCK-OSMO"  $WALLET $TXFLAG -y
+    #junod tx wasm instantiate $SWAP_CODE_ID '{"token1_denom":{"cw20":"'$BLOCK'"}, "token2_denom":{"native":"'$OSMO'"}, "lp_token_code_id": '$LP_TOKEN_CODE_ID'}' --label "BLOCK-OSMO"  $WALLET $TXFLAG -y
     
+    #juno1wxgxsyjp2dupujtdzg7sw8eeqt0td07wy5qpsyttca2vu2crglkst7m2n7
+    # # • JUNO-HLL
+    #junod tx wasm instantiate $SWAP_CODE_ID '{"token1_denom":{"native":"ujuno"}, "token2_denom":{"cw20":"'$HLL'"}, "lp_token_code_id": '$LP_TOKEN_CODE_ID'}' --label "JUNO-HLL"  $WALLET $TXFLAG
+    # junod tx wasm instantiate $SWAP_CODE_ID '{"token1_denom":{"cw20":"'$HLL'"}, "token2_denom":{"native":"ujuno"}, "lp_token_code_id": '$LP_TOKEN_CODE_ID'}' --label "JUNO-HLL Reverse"  $WALLET $TXFLAG -y
+    # junod tx wasm instantiate $SWAP_CODE_ID '{"token1_denom":{"cw20":"'$MARBLE'"}, "token2_denom":{"native":"ujuno"}, "lp_token_code_id": '$LP_TOKEN_CODE_ID'}' --label "MARBLE-JUNO Reverse"  $WALLET $TXFLAG -y
+    # junod tx wasm instantiate $SWAP_CODE_ID '{"token1_denom":{"cw20":"'$BLOCK'"}, "token2_denom":{"native":"ujuno"}, "lp_token_code_id": '$LP_TOKEN_CODE_ID'}' --label "BLOCK-JUNO Reverse"  $WALLET $TXFLAG -y
 }
 #################################### End of Function ###################################################
 $PARAM
 
+####################    Increase Allowance     #########################
+# {
+#   "increase_allowance": {
+#     "spender": "juno1zsws7uhe2cz89qsu70ncuv33aemsc2szmld97mx2yy8gkx7fld6q04kmyd",
+#     "amount": "100"
+#   }
+# }
