@@ -205,6 +205,7 @@ QueryContract() {
     junod query wasm contract-state smart $2 '{"info":{}}' $NODECHAIN
 }
 
+
 #################################### End of Function ###################################################
 $PARAM
 #junod query wasm contract-state smart $2 '{"info":{}}' $NODECHAIN
