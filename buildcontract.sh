@@ -57,7 +57,7 @@ CreateEnv() {
     git fetch
     git checkout v2.1.0
     make install
-
+    cd ..
     rm -rf juno
 
     junod keys import workshop workshop.key

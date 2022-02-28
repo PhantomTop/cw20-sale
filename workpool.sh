@@ -197,7 +197,7 @@ QuerySwapAddressList() {
 }
 
 QuerySwapContract() {
-    CONTRACT_ADDR="juno1d6xs8za2z7r8jnjpev9valt6gmj69ggphj9n8930g8rz2mrfde0spnppdj"
+    CONTRACT_ADDR="juno1hcsuhvxtygxg8gcrdxmzen2wmywf8sqpjgh0mxn3asz0e8na58vq2e4hls"
     junod query wasm contract-state smart $CONTRACT_ADDR '{"info":{}}' $NODECHAIN
 }
 
@@ -206,8 +206,8 @@ QueryContract() {
 }
 
 #################################### End of Function ###################################################
-#$PARAM
-junod query wasm contract-state smart $2 '{"info":{}}' $NODECHAIN
+$PARAM
+#junod query wasm contract-state smart $2 '{"info":{}}' $NODECHAIN
 #Manually Created LP Tokens
 #LP Token 1 : juno15x03xukszhqyzgz5t2vw7g2uldadj0va2z4uyhmnukhnqy6lpm7scrkq9h
 #LP Token 2 : juno1javclyu86lq00n4h5pj8ddc00atj9pclchwj9zy4xrx8qy9n59psza5ll6
