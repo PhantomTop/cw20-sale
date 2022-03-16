@@ -16,10 +16,10 @@ pub fn instantiate(
     deps: DepsMut,
     _env: Env,
     info: MessageInfo,
-    msg: InstantiateMsg,
+    msg: InstantiateMsg
 ) -> Result<Response, ContractError> {
     let state = State {
-        owner: info.sender,
+        owner: msg.owner,
         cw20_address: msg.cw20_address,
         price: Coin {
             denom: msg.denom,

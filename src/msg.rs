@@ -10,7 +10,8 @@ pub struct InstantiateMsg {
     pub cw20_address: Addr,
     pub denom: String,
     pub price: Uint128,
-    pub maxamount: Uint128
+    pub maxamount: Uint128,
+    pub owner: Addr
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]

@@ -5,17 +5,20 @@ PARAM=$1
 ####################################    Constants    ##################################################
 
 #depends on mainnet or testnet
-# NODE="--node https://rpc.junomint.com:443"
-# CHAIN_ID=juno-1
-# DENOM="ujuno"
-# CONTRACT_VMARBLE="juno1k0std830mz8ad34792pm9f5skv0rm2l7jgdqchn7msajatta4zcqq2krdu"
-# CONTRACT_VBLCK="juno1k0std830mz8ad34792pm9f5skv0rm2l7jgdqchn7msajatta4zcqq2krdu"
+NODE="--node https://rpc.junomint.com:443"
+CHAIN_ID=juno-1
+DENOM="ujuno"
+CONTRACT_VMARBLE="juno1k0std830mz8ad34792pm9f5skv0rm2l7jgdqchn7msajatta4zcqq2krdu"
+CONTRACT_VBLCK="juno1k0std830mz8ad34792pm9f5skv0rm2l7jgdqchn7msajatta4zcqq2krdu"
+#This is standard CW20 token and code id is 106, burnable is 107
+CONTRACT_PBLOCK="juno1exyjca8g792nykuvypnvm7tjzmt7m5nhvtjwh2w500v8n9gduttqm5vvxp" 
 
-NODE="--node https://rpc.juno.giansalex.dev:443"
-#NODE="--node https://rpc.uni.junomint.com:443"
-CHAIN_ID=uni-2
-DENOM="ujunox"
-CONTRACT_VMARBLE="juno1j5rl5sy40nmlqyugphgh5hnyrmj2cc5h7swy9x8rm0jkxy566nlqcx0jmv"
+
+# NODE="--node https://rpc.juno.giansalex.dev:443"
+# #NODE="--node https://rpc.uni.junomint.com:443"
+# CHAIN_ID=uni-2
+# DENOM="ujunox"
+# CONTRACT_VMARBLE="juno1j5rl5sy40nmlqyugphgh5hnyrmj2cc5h7swy9x8rm0jkxy566nlqcx0jmv"
 
 #not depends
 NODECHAIN=" $NODE --chain-id $CHAIN_ID"
@@ -27,7 +30,7 @@ FILE_UPLOADHASH="uploadtx.txt"
 FILE_SALE_CONTRACT_ADDR="contractaddr.txt"
 FILE_CODE_ID="code.txt"
 
-ADDR_ADMIN="juno1yysvuzekxu5mmkj0k4mwhexpkssgp96fqnf4u8"
+ADDR_ADMIN="juno1ddcvnnq0puupr0f3cyq77ffmk32ylaxcd3ahjg"
 
 ADDR_WORKSHOP="juno1htjut8n7jv736dhuqnad5mcydk6tf4ydeaan4s"
 ADDR_ACHILLES="juno15fg4zvl8xgj3txslr56ztnyspf3jc7n9j44vhz"
@@ -136,8 +139,13 @@ Instantiate() {
     
     #read from FILE_CODE_ID
     CODE_ID=$(cat $FILE_CODE_ID)
-    junod tx wasm instantiate $CODE_ID '{"cw20_address":"'$CONTRACT_VBLCK'", "denom":"ujuno", "price":"100", "maxamount":"10"}' --label "vBLCK Sale" $WALLET $TXFLAG -y
+    junod tx wasm instantiate $CODE_ID '{"cw20_address":"'$CONTRACT_PBLOCK'", "denom":"ujuno", "price":"100", "maxamount":"10", "owner":"'$ADDR_ADMIN'"}' --label "pBOLCK Sale" $WALLET $TXFLAG -y
 }
+
+# Instantiate2() {
+#     CODE_ID=6
+#     junod tx wasm instantiate $CODE_ID '{"name":"pBLOCK", "symbol":"pBLOCK", "decimals":6, "initial_balances":[{"address":"juno1htjut8n7jv736dhuqnad5mcydk6tf4ydeaan4s", "amount":"50000000000000"}], "marketing":{"marketing":"juno1htjut8n7jv736dhuqnad5mcydk6tf4ydeaan4s"}}' --label "pBLOCK" --amount "7500000ujuno" $WALLET $TXFLAG
+# }
 
 #Get Instantiated Contract Address
 GetContractAddress() {
@@ -146,7 +154,8 @@ GetContractAddress() {
     
     #read from FILE_CODE_ID
     CODE_ID=$(cat $FILE_CODE_ID)
-    CONTRACT_ADDR=$(junod query wasm list-contract-by-code $CODE_ID $NODECHAIN --output json | jq -r '.contracts[0]')
+    junod query wasm list-contract-by-code $CODE_ID $NODECHAIN --output json
+    CONTRACT_ADDR=$(junod query wasm list-contract-by-code $CODE_ID $NODECHAIN --output json | jq -r '.contracts[-1]')
     
     echo "Contract Address : "$CONTRACT_ADDR
 
@@ -162,12 +171,12 @@ GetContractAddress() {
 #Send initial tokens
 SendInitialFund() {
     CONTRACT_SALE=$(cat $FILE_SALE_CONTRACT_ADDR)
-    junod tx wasm execute $CONTRACT_VBLCK '{"send":{"amount":"1000000000","contract":"'$CONTRACT_SALE'","msg":""}}' $WALLET $TXFLAG
+    junod tx wasm execute $CONTRACT_PBLOCK '{"send":{"amount":"50000000000000","contract":"'$CONTRACT_SALE'","msg":""}}' $WALLET $TXFLAG
 }
 
 SetPrice() {
     CONTRACT_SALE=$(cat $FILE_SALE_CONTRACT_ADDR)
-    junod tx wasm execute $CONTRACT_SALE '{"set_price":{"denom":"ujuno", "price":"100"}}' $WALLET $TXFLAG
+    junod tx wasm execute $CONTRACT_SALE '{"set_price":{"denom":"ujuno", "price":"1000"}}' $WALLET $TXFLAG
 }
 
 WithdrawAll() {
