@@ -22,6 +22,7 @@ pub enum ExecuteMsg {
     Buy { denom: String, price: Uint128 },
     WithdrawAll {},
     Receive(Cw20ReceiveMsg),
+    UpdateConfig {address: Addr}
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]

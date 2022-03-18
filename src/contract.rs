@@ -55,7 +55,20 @@ pub fn execute(
         ExecuteMsg::Receive(msg) => try_receive(deps, msg),
         ExecuteMsg::Buy { denom, price } => try_buy(deps, info, denom, price),
         ExecuteMsg::WithdrawAll {} => try_withdraw_all(deps, info.sender),
+        ExecuteMsg::UpdateConfig { address } => update_config(deps, info, address)
     }
+}
+
+pub fn update_config(deps: DepsMut, info: MessageInfo, address: Addr) -> Result<Response, ContractError> {
+    if STATE.load(deps.storage)?.owner != info.sender {
+        return Err(ContractError::Unauthorized {});
+    }
+    STATE.update(deps.storage, |mut state| -> Result<_, ContractError> {
+        state.owner = address;
+        Ok(state)
+    })?;
+
+    Ok(Response::default())
 }
 
 pub fn try_set_price(deps: DepsMut, sender: Addr, price: Coin) -> Result<Response, ContractError> {
@@ -99,14 +112,14 @@ pub fn try_buy(
 ) -> Result<Response, ContractError> {
     let state = STATE.load(deps.storage).unwrap();
 
-    if denom != state.price.denom || price != state.price.amount {
-        return Err(ContractError::PriceNotCurrentError {
-            denom_current: state.price.denom,
-            denom_provided: denom,
-            price_current: state.price.amount,
-            price_provided: price,
-        });
-    }
+    // if denom != state.price.denom || price != state.price.amount {
+    //     return Err(ContractError::PriceNotCurrentError {
+    //         denom_current: state.price.denom,
+    //         denom_provided: denom,
+    //         price_current: state.price.amount,
+    //         price_provided: price,
+    //     });
+    // }
 
     let mut funds = Coin {
         amount: Uint128::new(0),
@@ -126,10 +139,13 @@ pub fn try_buy(
         return Err(ContractError::IncorretFunds {});
     }
 
-    let amount = match funds.amount.checked_div(state.price.amount) {
+    let mut amount = match funds.amount.checked_div(state.price.amount) {
         Ok(r) => r,
         Err(_) => return Err(ContractError::DivideByZeroError {}),
     };
+
+    //just for pBLOCK
+    amount = amount * Uint128::from(1000000u128);
 
     if amount > state.maxamount {
         return Err(ContractError::MaxAmountExceed {})
