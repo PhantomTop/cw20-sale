@@ -139,7 +139,7 @@ Instantiate() {
     
     #read from FILE_CODE_ID
     CODE_ID=$(cat $FILE_CODE_ID)
-    junod tx wasm instantiate $CODE_ID '{"cw20_address":"'$CONTRACT_PBLOCK'", "denom":"ujuno", "price":"100", "maxamount":"10", "owner":"'$ADDR_ADMIN'"}' --label "pBOLCK Sale" $WALLET $TXFLAG -y
+    junod tx wasm instantiate $CODE_ID '{"cw20_address":"'$CONTRACT_PBLOCK'", "denom":"ujuno", "price":"100", "maxamount":"10", "owner":"'$ADDR_WORKSHOP'"}' --label "pBLOCK Sale Mine" $WALLET $TXFLAG -y
 }
 
 # Instantiate2() {
