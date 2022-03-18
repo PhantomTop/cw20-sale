@@ -139,13 +139,13 @@ pub fn try_buy(
         return Err(ContractError::IncorretFunds {});
     }
 
-    let mut amount = match funds.amount.checked_div(state.price.amount) {
+    //just for pBLOCK
+    let mut amount = match funds.amount.checked_mul(Uint128::from(1000000u128)).unwrap().checked_div(state.price.amount) {
         Ok(r) => r,
         Err(_) => return Err(ContractError::DivideByZeroError {}),
     };
-
-    //just for pBLOCK
-    amount = amount * Uint128::from(1000000u128);
+    
+    // amount = amount * Uint128::from(1000000u128);
 
     if amount > state.maxamount {
         return Err(ContractError::MaxAmountExceed {})

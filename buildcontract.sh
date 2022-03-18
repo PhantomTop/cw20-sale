@@ -23,7 +23,7 @@ CONTRACT_PBLOCK="juno1exyjca8g792nykuvypnvm7tjzmt7m5nhvtjwh2w500v8n9gduttqm5vvxp
 
 #not depends
 NODECHAIN=" $NODE --chain-id $CHAIN_ID"
-TXFLAG=" $NODECHAIN --gas-prices 0.03$DENOM --gas 25000000 --gas-adjustment 1.3"
+TXFLAG=" $NODECHAIN --gas-prices 0.03$DENOM --gas auto --gas-adjustment 1.3"
 WALLET="--from workshop"
 WASMFILE="artifacts/sale.wasm"
 
@@ -140,7 +140,7 @@ Instantiate() {
     
     #read from FILE_CODE_ID
     CODE_ID=$(cat $FILE_CODE_ID)
-    junod tx wasm instantiate $CODE_ID '{"cw20_address":"'$CONTRACT_PBLOCK'", "denom":"ujuno", "price":"405", "maxamount":"10000000000", "owner":"'$ADDR_WORKSHOP'"}' --label "pBLOCK Sale" $WALLET $TXFLAG -y
+    junod tx wasm instantiate $CODE_ID '{"cw20_address":"'$CONTRACT_PBLOCK'", "denom":"ujuno", "price":"403", "maxamount":"10000000000", "owner":"'$ADDR_WORKSHOP'"}' --label "pBLOCK Sale" $WALLET $TXFLAG -y
 }
 
 # Instantiate2() {
@@ -172,17 +172,17 @@ GetContractAddress() {
 #Send initial tokens
 SendInitialFund() {
     CONTRACT_SALE=$(cat $FILE_SALE_CONTRACT_ADDR)
-    junod tx wasm execute $CONTRACT_PBLOCK '{"send":{"amount":"50000000000000","contract":"'$CONTRACT_SALE'","msg":""}}' $WALLET $TXFLAG
+    junod tx wasm execute $CONTRACT_PBLOCK '{"send":{"amount":"248138957","contract":"'$CONTRACT_SALE'","msg":""}}' $WALLET $TXFLAG
 }
 
 SetPrice() {
     CONTRACT_SALE=$(cat $FILE_SALE_CONTRACT_ADDR)
-    junod tx wasm execute $CONTRACT_SALE '{"set_price":{"denom":"ujuno", "price":"405"}}' $WALLET $TXFLAG
+    junod tx wasm execute $CONTRACT_SALE '{"set_price":{"denom":"ujuno", "price":"1"}}' $WALLET $TXFLAG
 }
 
 SetMax() {
     CONTRACT_SALE=$(cat $FILE_SALE_CONTRACT_ADDR)
-    junod tx wasm execute $CONTRACT_SALE '{"set_max":{"amount":"10000000000"}}' $WALLET $TXFLAG
+    junod tx wasm execute $CONTRACT_SALE '{"set_max":{"amount":"10000000"}}' $WALLET $TXFLAG
 }
 
 SetOwner() {
