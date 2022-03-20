@@ -11,7 +11,7 @@ DENOM="ujuno"
 CONTRACT_VMARBLE="juno1k0std830mz8ad34792pm9f5skv0rm2l7jgdqchn7msajatta4zcqq2krdu"
 CONTRACT_VBLCK="juno1k0std830mz8ad34792pm9f5skv0rm2l7jgdqchn7msajatta4zcqq2krdu"
 #This is standard CW20 token and code id is 106, burnable is 107
-CONTRACT_PBLOCK="juno1exyjca8g792nykuvypnvm7tjzmt7m5nhvtjwh2w500v8n9gduttqm5vvxp" 
+CONTRACT_PBLOCK="juno1d5jqnnh6juc9haf8pxtvkuck4gkqqqttnngu7ep7w82vevtkr8vqnknsdn" 
 
 
 # NODE="--node https://rpc.juno.giansalex.dev:443"
@@ -140,7 +140,7 @@ Instantiate() {
     
     #read from FILE_CODE_ID
     CODE_ID=$(cat $FILE_CODE_ID)
-    junod tx wasm instantiate $CODE_ID '{"cw20_address":"'$CONTRACT_PBLOCK'", "denom":"ujuno", "price":"403", "maxamount":"10000000000", "owner":"'$ADDR_WORKSHOP'"}' --label "pBLOCK Sale" $WALLET $TXFLAG -y
+    junod tx wasm instantiate $CODE_ID '{"cw20_address":"'$CONTRACT_PBLOCK'", "denom":"ujuno", "price":"403", "maxamount":"1000000000000", "owner":"'$ADDR_WORKSHOP'"}' --label "pBLOCK Sale" $WALLET $TXFLAG -y
 }
 
 # Instantiate2() {
@@ -172,17 +172,17 @@ GetContractAddress() {
 #Send initial tokens
 SendInitialFund() {
     CONTRACT_SALE=$(cat $FILE_SALE_CONTRACT_ADDR)
-    junod tx wasm execute $CONTRACT_PBLOCK '{"send":{"amount":"248138957","contract":"'$CONTRACT_SALE'","msg":""}}' $WALLET $TXFLAG
+    junod tx wasm execute $CONTRACT_PBLOCK '{"send":{"amount":"50000000000000","contract":"'$CONTRACT_SALE'","msg":""}}' $WALLET $TXFLAG
 }
 
 SetPrice() {
     CONTRACT_SALE=$(cat $FILE_SALE_CONTRACT_ADDR)
-    junod tx wasm execute $CONTRACT_SALE '{"set_price":{"denom":"ujuno", "price":"1"}}' $WALLET $TXFLAG
+    junod tx wasm execute $CONTRACT_SALE '{"set_price":{"denom":"ujuno", "price":"403"}}' $WALLET $TXFLAG
 }
 
 SetMax() {
     CONTRACT_SALE=$(cat $FILE_SALE_CONTRACT_ADDR)
-    junod tx wasm execute $CONTRACT_SALE '{"set_max":{"amount":"10000000"}}' $WALLET $TXFLAG
+    junod tx wasm execute $CONTRACT_SALE '{"set_max":{"amount":"1000000000000"}}' $WALLET $TXFLAG
 }
 
 SetOwner() {
@@ -208,7 +208,8 @@ PrintPoolContractState() {
 }
 
 PrintWalletBalance() {
-    junod query bank balances $ADDR_ADMIN $NODECHAIN
+    junod query bank balances $ADDR_WORKSHOP $NODECHAIN
+    junod query wasm contract-state smart $CONTRACT_PBLOCK '{"balance":{"address":"'$ADDR_WORKSHOP'"}}' $NODECHAIN
 }
 
 export PATH="$HOME/ubuntu/go/bin:$PATH"
